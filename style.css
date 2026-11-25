@@ -78,6 +78,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .preco-por span { font: 500 18px var(--corpo); opacity: .8; letter-spacing: 0; }
 .preco-parc { font-size: 17px; font-weight: 600; }
 .acoes { display: flex; gap: 14px; flex-wrap: wrap; }
+.acoes .seguro { order: 3; flex-basis: 100%; margin-top: 0; }
 .hero-foto { margin: 0; position: relative; background: #fff; border-radius: var(--r); padding-top: 16px; }
 .hero-foto img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 30%; border-radius: var(--r) var(--r) 0 0; }
 .hero-foto .selo { position: absolute; width: 124px; height: 124px; top: -26px; right: -26px; }
@@ -209,16 +210,26 @@ blockquote { margin: 26px 0 0; padding: 18px 22px; background: var(--fundo); bor
 @media (max-width: 900px) {
   body { font-size: 17px; }
   .topo nav, .topo-cta { display: none; }
-  .topo-in { min-height: 72px; justify-content: center; }
-  .logo img { width: 92px; }
+  .topo-in { min-height: 58px; justify-content: center; }
+  .logo img { width: 76px; }
   .hero-in, .problema-in, .plat-in, .recebe-in, .prof-in, .duv-in, .rod-in, .fbo-grid, .campo-grid, .mod-lista, .dados-grid { grid-template-columns: 1fr; }
   .hero-foto { max-width: 260px; margin: 8px auto 0; }
   .hero-foto .selo { width: 96px; height: 96px; top: -18px; right: -18px; }
-  .hero-sub { font-size: 17px; }
+  .hero-sub { font-size: 16px; margin-top: 10px; line-height: 1.5; }
   .botao, .botao-sec { width: 100%; padding: 16px 14px; font-size: 18px; }
   .selos-in { grid-template-columns: 1fr 1fr; }
   .prof-in img { max-width: 320px; }
-  .bf { font-size: 14px; gap: 10px; }
+  .bf { font-size: 13px; gap: 10px; padding-top: 8px; padding-bottom: 8px; }
+  /* 1ª tela do celular: oferta, botão e selo de confiança sem rolar */
+  .bf a { display: none; }
+  .hero-in { padding-top: 22px; }
+  .hero-pre { font-size: 14px; margin-bottom: 8px; }
+  .hero h1 { font-size: 28px; }
+  .preco { margin: 16px 0 14px; }
+  .preco-tag { margin-bottom: 6px; }
+  .hero .preco-por { font-size: 40px; }
+  .acoes { gap: 10px; }
+  .acoes .seguro { order: 0; font-size: 14px; text-align: center; width: 100%; }
   .fixo {
     display: flex; position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 20;
     background: var(--ciano); color: var(--noite); text-decoration: none; font: 800 18px/1 var(--titulo);
