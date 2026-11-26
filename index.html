@@ -290,6 +290,26 @@ window.mcValor = 1309;
 
 <a class="fixo comprar" data-pos="fixo" href="https://pay.hotmart.com/W105042869K?checkoutMode=10&amp;offDiscount=SMOBLACK2026">Garantir vaga por R$ 1.309</a>
 
+<!-- antes do checkout: nome + WhatsApp (sem isso o ManyClone não sabe para quem mandar o lembrete; o abandono da Hotmart não chega) -->
+<dialog class="fm" aria-labelledby="fm-tit">
+  <form method="dialog" novalidate>
+    <button type="button" class="fm-x" data-fechar aria-label="Fechar">×</button>
+    <p class="fm-tag">Quase lá 🎉</p>
+    <h2 id="fm-tit">Só 2 coisinhas e você vai pro pagamento</h2>
+    <p class="fm-sub">O desconto de 30% já vai aplicado. Leva uns 10 segundos, prometo.</p>
+    <label>Como você gosta de ser chamado(a)?
+      <input name="nome" type="text" autocomplete="given-name" placeholder="Ex.: Ana" maxlength="80">
+    </label>
+    <label>Seu WhatsApp com DDD
+      <input name="whats" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="(11) 91234-5678" required>
+    </label>
+    <p class="fm-erro" role="alert"></p>
+    <button type="submit" class="botao fm-ir" data-enviar>Ir pro pagamento com 30% off →</button>
+    <p class="fm-seg">🔒 Pagamento seguro pela Hotmart · Pix ou cartão · 7 dias de garantia</p>
+    <p class="fm-lgpd">Se algo travar no pagamento, a gente te dá uma mão pelo WhatsApp. Zero spam, e você pode responder SAIR quando quiser.</p>
+  </form>
+</dialog>
+
 <script src="main.js" defer></script>
 </body>
 </html>

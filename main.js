@@ -9,6 +9,63 @@
   });
 })();
 
+// formulário antes do checkout: nome + WhatsApp → Lead no ManyClone (agenda o lembrete se não comprar) → Hotmart já preenchida.
+// O t.js já deu InitiateCheckout e pôs xcod/UTMs no href no clique (fase de captura); aqui só abre o formulário.
+(() => {
+  const dlg = document.querySelector('dialog.fm');
+  if (!dlg || !dlg.showModal) return; // navegador sem <dialog>: o botão segue direto para a Hotmart
+  const f = dlg.querySelector('form'), nome = f.elements.nome, whats = f.elements.whats;
+  const btn = f.querySelector('[data-enviar]'), msg = f.querySelector('.fm-erro'), rotulo = btn.textContent;
+  let destino = '', indo = false;
+  // celular/fixo do Brasil → "55" + DDD + número; senão null
+  const validar = s => {
+    let d = s.replace(/\D/g, '');
+    if (d.length >= 12 && d.startsWith('55')) d = d.slice(2);
+    d = d.replace(/^0/, '');
+    const ddd = Number(d.slice(0, 2));
+    if (ddd < 11 || (d.length !== 10 && d.length !== 11) || (d.length === 11 && d[2] !== '9')) return null;
+    return '55' + d;
+  };
+  const mascara = s => {
+    const d = s.replace(/\D/g, '').replace(/^55(?=\d{10,})/, '').replace(/^0/, '').slice(0, 11);
+    if (d.length <= 2) return d ? `(${d}` : '';
+    const c = d.slice(2), k = d.length === 11 ? 5 : 4;
+    return c.length > k ? `(${d.slice(0, 2)}) ${c.slice(0, k)}-${c.slice(k)}` : `(${d.slice(0, 2)}) ${c}`;
+  };
+  whats.addEventListener('input', () => { whats.value = mascara(whats.value); whats.removeAttribute('aria-invalid'); msg.textContent = ''; });
+
+  document.addEventListener('click', e => {
+    const a = e.target.closest && e.target.closest('a.comprar');
+    if (!a || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    e.preventDefault();
+    destino = a.href;
+    try { const s = JSON.parse(localStorage.getItem('smo_form') || 'null'); if (s && !whats.value) { nome.value = s.nome || ''; whats.value = s.whats || ''; } } catch { /* sem storage */ }
+    indo = false; btn.disabled = false; btn.textContent = rotulo; msg.textContent = '';
+    dlg.showModal();
+    (nome.value ? whats : nome).focus();
+  });
+  dlg.querySelector('[data-fechar]').addEventListener('click', () => dlg.close());
+  dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); }); // toque fora fecha
+
+  f.addEventListener('submit', e => {
+    e.preventDefault();
+    if (indo) return;
+    const ph = validar(whats.value), n = nome.value.trim().replace(/\s+/g, ' ').slice(0, 80);
+    if (!ph) { msg.textContent = 'Opa, confere o número com DDD? 🙂'; whats.setAttribute('aria-invalid', 'true'); whats.focus(); return; }
+    indo = true; btn.disabled = true; btn.textContent = 'Abrindo o pagamento…';
+    try { localStorage.setItem('smo_form', JSON.stringify({ nome: n, whats: whats.value })); } catch { /* ok */ }
+    // Hotmart preenche nome e telefone pela URL (nomes confirmados no checkout da CN, 13/10)
+    const u = new URL(destino);
+    if (n) u.searchParams.set('name', n);
+    u.searchParams.set('phoneac', ph.slice(2, 4)); u.searchParams.set('phonenumber', ph.slice(4));
+    const retomar = new URL(u); retomar.searchParams.set('src', 'recuperacao'); // link do lembrete no WhatsApp
+    try { window.mcRastreio && window.mcRastreio.evento('Lead', { nome: n || undefined, ph: '+' + ph, retomar: retomar.toString() }); } catch { /* rastreio nunca bloqueia a venda */ }
+    setTimeout(() => { location.href = u.toString(); }, 150); // dá tempo do sendBeacon sair
+  });
+  // voltou do checkout pelo "voltar": destrava
+  addEventListener('pageshow', e => { if (e.persisted) { indo = false; btn.disabled = false; btn.textContent = rotulo; } });
+})();
+
 // contagem até o fim da Black Friday
 (() => {
   const els = document.querySelectorAll('.contagem');
