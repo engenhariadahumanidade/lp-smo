@@ -41,10 +41,24 @@ a, button, summary { touch-action: manipulation; }
 .botao, .fixo, .topo-cta, summary { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 .botao:active, .fixo:active, .topo-cta:active { transform: scale(.97); }
 
+/* faixa da Black Friday: oferta + relógio + ação */
+.bf { background: var(--roxo); position: relative; overflow: hidden; }
+.bf::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(255,255,255,.14) 50%, transparent 70%); transform: translateX(-100%); animation: brilho 5.5s var(--ease) infinite; pointer-events: none; }
+@keyframes brilho { 0%, 55% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+.bf-in { max-width: 1440px; margin: 0 auto; padding: 12px var(--m); display: flex; align-items: center; justify-content: space-between; gap: 24px; position: relative; z-index: 1; }
+.bf-tit { display: flex; align-items: center; gap: 12px; font-size: 16px; flex-wrap: wrap; }
+.bf-tit b { font: 900 18px/1 var(--titulo); letter-spacing: -.01em; }
+.bf-off { background: var(--ciano); color: var(--noite); font: 900 16px/1 var(--titulo); padding: 7px 10px; animation: pulso 2.4s var(--ease) infinite; }
+@keyframes pulso { 0%, 70%, 100% { transform: scale(1); } 80% { transform: scale(1.08); } }
+.relogio { display: flex; gap: 8px; }
+.relogio span { display: grid; justify-items: center; min-width: 54px; background: rgba(10,19,56,.55); padding: 6px 8px 5px; font-size: 11px; line-height: 1.1; color: #f0d6f3; }
+.relogio b { font: 900 22px/1.05 var(--titulo); font-variant-numeric: tabular-nums; color: #fff; display: inline-block; }
+.relogio b.vira { animation: vira .45s var(--ease); }
+@keyframes vira { from { transform: translateY(-40%); opacity: 0; } }
+.bf-cta { background: #fff; color: var(--roxo); text-decoration: none; font: 800 15px/1 var(--titulo); padding: 13px 18px; white-space: nowrap; transition: transform 120ms var(--ease); }
+.bf-cta:active { transform: scale(.97); }
+
 /* faixa e topo */
-.bf { background: var(--roxo); padding: 11px var(--m); display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 15px; }
-.bf strong { font-weight: 700; }
-.bf a { color: #fff; font-weight: 700; text-underline-offset: 4px; white-space: nowrap; }
 .topo-in { display: flex; justify-content: space-between; align-items: center; padding-top: 24px; padding-bottom: 24px; }
 .logo img { width: 104px; }
 .topo nav { display: flex; gap: 34px; font-size: 15px; font-weight: 500; }
@@ -74,10 +88,13 @@ a, button, summary { touch-action: manipulation; }
 .foto-cheia img { width: 100%; height: min(86vh, 880px); object-fit: cover; object-position: 50% 45%; }
 .foto-cheia figcaption, .campo-foto figcaption, .plat-in figcaption { padding-top: 14px; font-size: 15px; color: var(--nevoa); }
 
-/* números da formação */
-.selos { background: var(--azul); }
-.selos-in { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; padding-top: 44px; padding-bottom: 44px; font-size: 16px; color: var(--nevoa); }
-.selos strong { display: block; font: 900 clamp(24px, 2.2vw, 34px)/1.05 var(--titulo); letter-spacing: -.03em; color: #fff; margin-bottom: 6px; }
+/* números da formação: letreiro correndo */
+.selos { background: var(--azul); overflow: hidden; }
+.letreiro { display: flex; width: max-content; animation: corre 38s linear infinite; }
+.selos-in { display: flex; gap: 72px; padding: 34px 36px 34px 72px; font-size: 16px; color: var(--nevoa); }
+.selos-in li { white-space: nowrap; }
+@keyframes corre { to { transform: translateX(-50%); } }
+.selos strong { display: inline; margin-right: 10px; font: 900 clamp(24px, 2.2vw, 34px)/1.05 var(--titulo); letter-spacing: -.03em; color: #fff; margin-bottom: 6px; }
 
 /* o problema */
 .problema { padding: var(--sec) 0; }
@@ -205,6 +222,14 @@ a, button, summary { touch-action: manipulation; }
 .rodape a { color: #fff; }
 .rod-legal { font-size: 13px; }
 
+/* entradas: só quando o script marca a página (sem script, tudo aparece) */
+.js .rev { opacity: 0; transform: translateY(28px); transition: opacity .8s var(--ease), transform .8s var(--ease); transition-delay: var(--d, 0s); }
+.js .rev.in { opacity: 1; transform: none; }
+.foto-cheia, .campo-foto { overflow: hidden; }
+.foto-cheia img, .campo-foto img { transform: scale(var(--z, 1.08)); transform-origin: 50% 50%; will-change: transform; }
+.caixa .preco-por { background: linear-gradient(transparent 62%, rgba(34,211,238,.45) 62%) no-repeat; background-size: 0% 100%; transition: background-size 1.1s var(--ease) .3s; }
+.caixa .preco-por.in { background-size: 100% 100%; }
+
 /* botão fixo no celular */
 .fixo { display: none; }
 
@@ -223,7 +248,11 @@ a, button, summary { touch-action: manipulation; }
 
 @media (max-width: 900px) {
   body { font-size: 17px; }
-  .topo nav, .topo-cta, .bf a { display: none; }
+  .topo nav, .topo-cta, .bf-cta, .bf-txt { display: none; }
+  .bf-in { padding: 10px var(--m); gap: 10px; }
+  .relogio span { min-width: 44px; padding: 5px 5px 4px; font-size: 10px; }
+  .relogio b { font-size: 18px; }
+  .selos-in { gap: 48px; padding: 24px 24px 24px 48px; }
   .topo-in { padding-top: 18px; padding-bottom: 14px; }
   .logo img { width: 84px; }
   .hero-in, .problema-in, .plat-in, .recebe-in, .prof-in, .duv-in, .rod-in, .fbo-grid, .mod-lista, .dados-grid, .caixa { grid-template-columns: 1fr; }
@@ -252,6 +281,8 @@ a, button, summary { touch-action: manipulation; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { transition-duration: .01ms !important; }
+  *, *::before, *::after { transition-duration: .01ms !important; animation: none !important; }
+  .letreiro { flex-wrap: wrap; width: auto; } .letreiro ul[aria-hidden] { display: none; }
+  .foto-cheia img, .campo-foto img { transform: none; }
   html { scroll-behavior: auto; }
 }
