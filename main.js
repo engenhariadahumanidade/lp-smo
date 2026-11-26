@@ -41,23 +41,34 @@
   document.querySelectorAll('a[href*="wa.me"]').forEach(a => a.addEventListener('click', () => fb('track', 'Contact')));
 })();
 
-// matriz de risco do PGR (1ª tela): 5x5 pela gravidade; os riscos com nome nas células graves;
-// depois cada célula "acalma" (as graves viram ciano), da mais grave para a mais leve
+// matriz de risco do PGR (1ª tela), em ciclo: riscos no vermelho com nome -> as células acalmam e os nomes viram as
+// ações do Facilitador -> volta. A legenda diz em palavras o que está acontecendo.
 (() => {
-  const m = document.getElementById('matriz');
+  const m = document.getElementById('matriz'), leg = document.getElementById('matriz-fase');
   if (!m) return;
   const cor = ['#3d5bd9', '#2f6fd9', '#f5a524', '#ff7a59', '#ff4d6d'], cel = [];
   for (let l = 0; l < 5; l++) for (let c = 0; c < 5; c++) {
     const g = (4 - l) + c, i = document.createElement('i');
-    i.style.setProperty('--c', cor[Math.min(4, Math.floor(g / 2))]);
+    i.dataset.risco = cor[Math.min(4, Math.floor(g / 2))];
     i.dataset.calma = g >= 6 ? '#22d3ee' : g >= 4 ? '#2a4cc4' : '#1a2a78';
-    i.dataset.g = g; m.append(i); cel.push(i);
+    i.dataset.g = g; i.style.background = i.dataset.risco; m.append(i); cel.push(i);
   }
-  [['Sobrecarga', 0, 4], ['Assédio', 0, 3], ['Metas abusivas', 1, 4], ['Conflito', 1, 3]].forEach(([t, l, c]) => {
-    const i = cel[l * 5 + c]; i.textContent = t; i.classList.add('rot');
-  });
-  const acalma = i => { i.style.background = i.dataset.calma; i.classList.add('calmo'); };
+  const NOMES = [['Sobrecarga', 'Roda Estruturada', 0, 4], ['Assédio', 'Escuta', 0, 3], ['Metas abusivas', 'Plano de ação', 1, 4], ['Conflito', 'Reavaliação 90 dias', 1, 3]];
+  const rot = NOMES.map(([r, a, l, c]) => { const i = cel[l * 5 + c]; i.classList.add('rot'); i.textContent = r; return { i, r, a }; });
+  const fase = (t) => { if (leg) leg.textContent = t; };
+  fase('Sem gestão: os riscos ficam no vermelho');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; // sem movimento: fica o estado de risco, com a legenda
   const ordem = [...cel].sort((a, b) => b.dataset.g - a.dataset.g);
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; // sem movimento: fica a matriz de risco parada
-  ordem.forEach((i, k) => setTimeout(() => acalma(i), 1600 + k * 70));
+  const acalmar = () => {
+    fase('Com o Facilitador: as ações acalmam o mapa');
+    ordem.forEach((i, k) => setTimeout(() => { i.style.background = i.dataset.calma; }, k * 70));
+    rot.forEach(({ i, a }, k) => setTimeout(() => { i.textContent = a; i.classList.add('calmo'); }, 300 + k * 140));
+  };
+  const voltar = () => {
+    fase('Sem gestão: os riscos ficam no vermelho');
+    [...ordem].reverse().forEach((i, k) => setTimeout(() => { i.style.background = i.dataset.risco; }, k * 40));
+    rot.forEach(({ i, r }) => { i.textContent = r; i.classList.remove('calmo'); });
+  };
+  const ciclo = () => { acalmar(); setTimeout(voltar, 5200); };
+  setTimeout(() => { ciclo(); setInterval(ciclo, 10000); }, 2600);
 })();
