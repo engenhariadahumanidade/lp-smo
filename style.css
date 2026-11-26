@@ -76,6 +76,7 @@ a, button, summary { touch-action: manipulation; }
 .preco-por { font: 800 clamp(52px, 4.8vw, 80px)/.95 var(--titulo); letter-spacing: -.04em; margin: 4px 0; }
 .selo-mec { display: flex; gap: 14px; align-items: center; margin-top: 26px; font-size: 15px; color: var(--nevoa); }
 .selo-mec b { background: var(--branco); color: var(--noite); font: 900 14px var(--titulo); padding: 6px 9px; }
+.selo-mec a, details a { color: var(--ciano); text-underline-offset: 3px; }
 .matriz-lado { align-self: center; }
 .matriz { display: grid; grid-template-columns: repeat(5, 1fr); gap: clamp(5px, .55vw, 9px); aspect-ratio: 1; }
 .matriz i { display: block; background: var(--c); transition: background-color .9s var(--ease); }
