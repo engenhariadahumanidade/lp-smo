@@ -76,6 +76,7 @@ a, button, summary { touch-action: manipulation; }
 .preco-por { font: 800 clamp(52px, 4.8vw, 80px)/.95 var(--titulo); letter-spacing: -.04em; margin: 4px 0; }
 .selo-mec { display: flex; gap: 14px; align-items: center; margin-top: 26px; font-size: 15px; color: var(--nevoa); }
 .selo-mec b { background: var(--branco); color: var(--noite); font: 900 14px var(--titulo); padding: 6px 9px; }
+.selo-mec .selo-logo { padding: 5px 8px; flex: none; } .selo-mec .selo-logo img { width: 72px; }
 .selo-mec a, details a { color: var(--ciano); text-underline-offset: 3px; }
 .matriz-lado { align-self: center; }
 .matriz { display: grid; grid-template-columns: repeat(5, 1fr); gap: clamp(5px, .55vw, 9px); aspect-ratio: 1; }
@@ -310,3 +311,31 @@ a, button, summary { touch-action: manipulation; }
 .fm-seg { font-size: 14px; font-weight: 600; color: var(--suave); text-align: center; }
 .fm-lgpd { font-size: 13px; color: #6b7393; text-align: center; line-height: 1.45; }
 @media (prefers-reduced-motion: reduce) { .fm[open] { animation: none; } }
+
+/* credencial e-MEC */
+.credencial { background: var(--claro); color: var(--tinta); padding: var(--sec) 0; }
+.cred-in { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: clamp(40px, 6vw, 112px); align-items: center; }
+.cred-txt p { margin-top: 28px; font-size: 20px; color: var(--suave); }
+.cred-card { background: var(--branco); padding: clamp(24px, 3vw, 40px); box-shadow: 0 30px 60px -30px rgba(10, 19, 56, .35); border-top: 6px solid var(--ciano); }
+.cred-logo { width: 150px; }
+.cred-dados { margin: 24px 0 0; display: grid; gap: 0; }
+.cred-dados div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid #e3e6f0; font-size: 16px; }
+.cred-dados dt { color: var(--suave); }
+.cred-dados dd { margin: 0; font-weight: 700; text-align: right; }
+.ativo { color: #138a4a; }
+.ativo::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #1fb866; margin-right: 8px; box-shadow: 0 0 0 4px rgba(31, 184, 102, .18); }
+.cred-nota { display: flex; align-items: center; gap: 18px; margin-top: 24px; }
+.cred-nota strong { font: 900 84px/.8 var(--titulo); letter-spacing: -.05em; color: var(--azul); }
+.cred-nota small { display: block; margin-top: 10px; font-size: 14px; line-height: 1.35; color: var(--suave); }
+.barras { display: flex; gap: 6px; }
+.barras i { width: 34px; height: 12px; background: #e3e6f0; position: relative; overflow: hidden; }
+.barras i::after { content: ""; position: absolute; inset: 0; background: var(--ciano); transform: scaleX(1); transform-origin: left; }
+.js .cred-nota.rev .barras i::after { transform: scaleX(0); transition: transform .5s var(--ease); }
+.js .cred-nota.rev.in .barras i::after { transform: scaleX(1); }
+.js .cred-nota.rev.in .barras i:nth-child(2)::after { transition-delay: .12s; }
+.js .cred-nota.rev.in .barras i:nth-child(3)::after { transition-delay: .24s; }
+.js .cred-nota.rev.in .barras i:nth-child(4)::after { transition-delay: .36s; }
+.js .cred-nota.rev.in .barras i:nth-child(5)::after { transition-delay: .48s; }
+.cred-link { display: block; margin-top: 28px; }
+@media (max-width: 900px) { .cred-in { grid-template-columns: 1fr; } .barras i { width: 28px; } }
+@media (prefers-reduced-motion: reduce) { .js .cred-nota.rev .barras i::after { transform: scaleX(1); transition: none; } }
