@@ -4,3 +4,7 @@ _v1/
 _v2/
 video/
 img/*.webp
+_opcoes/
+*-v3.html
+*-v3.css
+*.bak-*
