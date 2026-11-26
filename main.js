@@ -35,10 +35,8 @@
   document.querySelectorAll('.hero, .oferta, .final, .rodape').forEach(a => io.observe(a));
 })();
 
-// Pixel da SMO: clique em comprar = InitiateCheckout (com valor); WhatsApp = Contact
+// Visita e clique em comprar: o script do ManyClone (t.js) dispara. Aqui só o clique no WhatsApp (Contact, só navegador).
 (() => {
   const fb = (...a) => { try { window.fbq && window.fbq(...a); } catch { /* bloqueador */ } };
-  document.querySelectorAll('a.comprar').forEach(a => a.addEventListener('click', () =>
-    fb('track', 'InitiateCheckout', { value: 1309, currency: 'BRL', content_name: 'Formação SMO', content_ids: ['7437099'] })));
   document.querySelectorAll('a[href*="wa.me"]').forEach(a => a.addEventListener('click', () => fb('track', 'Contact')));
 })();
